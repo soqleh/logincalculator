@@ -28,7 +28,7 @@ public class HistoryService {
         return historyRepository.findById(historyId).orElse(null);
     }
 
-    public void deleteById(History history){
-        historyRepository.delete(history);
+    public void deleteById(long historyId){
+        historyRepository.delete(findById(historyId));
     }
 }

@@ -22,7 +22,8 @@ public class MemberController {
 
     @GetMapping("/")
     public String index() {
-        return "/home/index";
+        System.out.println("THIS: /");
+        return "/calculator/index";
     }
 
     @GetMapping("/member/signup")

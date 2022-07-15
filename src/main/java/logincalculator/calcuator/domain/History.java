@@ -16,7 +16,7 @@ public class History {
     @Column(name="history_id")
     private Long id;
 
-    private String formula;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")

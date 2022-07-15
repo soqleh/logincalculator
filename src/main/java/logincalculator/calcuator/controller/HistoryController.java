@@ -13,15 +13,13 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping("/history")
 public class HistoryController {
     private final HistoryService historyService;
     private final MemberService memberService;
@@ -29,27 +27,54 @@ public class HistoryController {
     @PostMapping("/history/create")
     public String addHistory(@RequestBody HashMap<String, Object> map) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth instanceof AnonymousAuthenticationToken) return "/home/index";
+        if (auth instanceof AnonymousAuthenticationToken) return "/calculator/index";
 
         Object principal = auth.getPrincipal();
         UserDetails userDetails = (UserDetails)principal;
-
         String username = ((UserDetails) principal).getUsername();
-        String password = ((UserDetails) principal).getUsername();
-//        System.out.println("username: " + username + ", password: " + password);
+        Member member = memberService.findByUserName(username);
+
         String payload = (String) map.get("sendData");
         History history = new History();
-        history.setFormula(payload);
-        Member member = memberService.findByUserName(username);
+        history.setContent(payload);
         history.setMember(member);
         member.getHistoryList().add(history);
         History newHistory = historyService.createHistory(history);
-        return "/home/index";
+        return "/calculator/index";
     }
 
 
     //R: 히스토리 가져오기
-
+    @GetMapping("/history/list")
+    public String items(Model model) {
+        System.out.println("THIS: /history/list");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) return "/calculator/index";
+        Object principal = auth.getPrincipal();
+        UserDetails userDetails = (UserDetails)principal;
+        String username = ((UserDetails) principal).getUsername();
+        Member member = memberService.findByUserName(username);
+        List<History> items = historyService.findByMember(member);
+        for (History item : items) {
+            String content = item.getContent();
+            System.out.println("&& " + content);
+        }
+        model.addAttribute("items", items);
+        return "/calculator/index";
+    }
     //D: 히스토리 삭제
+    @GetMapping("/history/delete/{historyId}")
+    public String deleteHistory(@PathVariable long historyId, Model model) {
+        System.out.println("THIS: /delete/{historyId}");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) return "/calculator/index";
+        Object principal = auth.getPrincipal();
+        UserDetails userDetails = (UserDetails)principal;
+        String username = ((UserDetails) principal).getUsername();
+        Member member = memberService.findByUserName(username);
+        historyService.deleteById(historyId);
+
+        return "redirect:/history/list";
+    }
 
 }

@@ -138,5 +138,30 @@
             document.getElementById('result').value = "";
         }
 </script>
+
+<hr sec:authorize="isAuthenticated()" class="my-4">
+<div sec:authorize="isAuthenticated()">
+    <table class="table">
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>목차</th>-->
+<!--            <th>연산</th>-->
+<!--            <th>삭제</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td></td>
+            <td th:text="${item.content}">B</td>
+
+            <td>
+                <button th:onclick="|location.href='@{/history/delete/{historyId}(historyId=${item.id})}'|" type="button">삭제
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>
