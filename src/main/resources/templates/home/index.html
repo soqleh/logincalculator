@@ -1,6 +1,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <meta name="_csrf" th:content="${_csrf.token}">
     <title>Calculator</title>
     <h1>계산기</h1>
     <h4 sec:authorize="isAuthenticated()">반갑습니다. <span sec:authentication="name"></span>님!</h4>
@@ -104,17 +106,31 @@
 
             var reqURL = "http://localhost:8080/history/create"; // 요청 주소
             var jsonData = { // Body에 첨부할 json 데이터
-    				"senData" : calStr
+    				"sendData" : calStr
             };
+            //Ajax CSRF 문제 수정
+            var header = $("meta[name='_csrf_header']").attr('content');
+            var token = $("meta[name='_csrf']").attr('content');
+
             $.ajax({
     			// [요청 시작 부분]
     			url: reqURL, //주소
+    			beforeSend: function(xhr){
+    			//Ajax CSRF 문제 수정
+                    xhr.setRequestHeader(header, token);
+                },
     			data: JSON.stringify(jsonData), //전송 데이터
     			type: "POST", //전송 타입
     			async: true, //비동기 여부
     			timeout: 5000, //타임 아웃 설정
     			dataType: "JSON", //응답받을 데이터 타입 (XML,JSON,TEXT,HTML,JSONP)
     			contentType: "application/json; charset=utf-8", //헤더의 Content-Type을 설정
+    			success:function(json){
+                console.log('message: ' + "success"+ JSON.stringify(json));
+                },
+                error:function(error){
+                    console.log('message Error' + JSON.stringify(error));
+                }
     		});
         }
         function reset() {
