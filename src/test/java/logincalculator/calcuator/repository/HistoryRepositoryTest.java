@@ -24,11 +24,10 @@ public class HistoryRepositoryTest {
         History history = new History();
         //given
         Member member = new Member();
-        member.setUserId("bbbb");
-        member.setUserRealName("memberB");
-        member.setPw("1234");
+        member.setUserName("bbbb");
+        member.setPassword("1234");
 //        member.setId(100L);
-        history.setFormula("1+2=3");
+        history.setContent("1+2=3");
         history.setMember(member);
         //when
         History returnedHistory = historyRepository.save(history);

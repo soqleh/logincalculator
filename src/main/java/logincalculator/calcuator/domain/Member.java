@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
-@NoArgsConstructor(access= AccessLevel.PROTECTED)
+@NoArgsConstructor/*(access= AccessLevel.PROTECTED)*/
 @Entity
 @Getter @Setter
 public class Member {
