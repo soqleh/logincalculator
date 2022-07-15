@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter @Setter
 @Entity
 @NoArgsConstructor
-public class CalHistory {
+public class History {
     @Id
     @GeneratedValue
     @Column(name="history_id")

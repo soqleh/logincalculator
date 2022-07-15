@@ -1,12 +1,12 @@
 package logincalculator.calcuator.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
+@NoArgsConstructor(access= AccessLevel.PROTECTED)
 @Entity
 @Getter @Setter
 public class Member {
@@ -15,12 +15,17 @@ public class Member {
     private Long id;
 
     @NotEmpty
-    private String userId;
+    private String userName;
+
     @NotEmpty
-    private String userRealName;
-    @NotEmpty
-    private String pw;
+    private String password;
     @OneToMany(mappedBy = "member",fetch = FetchType.LAZY)
-    private List<CalHistory> historyList;
+    private List<History> historyList;
+	@Builder
+    public Member(Long id, String username, String password) {
+        this.id = id;
+        this.userName = username;
+        this.password = password;
+    }
 
 }

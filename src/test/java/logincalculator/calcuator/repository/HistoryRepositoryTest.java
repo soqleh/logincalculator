@@ -1,6 +1,6 @@
 package logincalculator.calcuator.repository;
 
-import logincalculator.calcuator.domain.CalHistory;
+import logincalculator.calcuator.domain.History;
 import logincalculator.calcuator.domain.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -12,16 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CalHistoryRepositoryTest {
+public class HistoryRepositoryTest {
     @Autowired
-    CalHistoryRepository historyRepository;
+    HistoryRepository historyRepository;
 
     @Test
     @Transactional
 //    @Rollback(false)
     public void testHistory() throws Exception {
         //given
-        CalHistory history = new CalHistory();
+        History history = new History();
         //given
         Member member = new Member();
         member.setUserId("bbbb");
@@ -31,7 +31,7 @@ public class CalHistoryRepositoryTest {
         history.setFormula("1+2=3");
         history.setMember(member);
         //when
-        CalHistory returnedHistory = historyRepository.save(history);
+        History returnedHistory = historyRepository.save(history);
         //then
         Assertions.assertThat(returnedHistory).isEqualTo(history);
     }
